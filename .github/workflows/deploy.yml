@@ -1,0 +1,43 @@
+name: CI/CD POC
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/*'
+
+jobs:
+  # This job runs for EVERY push to build the app
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build logic
+        run: echo "Building application..."
+
+  # This job only runs for the 'develop' branch
+  deploy-dev:
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: dev  # This links it to the 'dev' secrets we made
+    steps:
+      - name: Deploy to Dev
+        run: |
+          echo "Deploying to DEV environment"
+          echo "Secret Key is: ${{ secrets.API_KEY }}"
+
+  # This job only runs for the 'main' branch
+  deploy-prod:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: prod  # This links it to the 'prod' secrets we made
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to PROD environment"
+          echo "Secret Key is: ${{ secrets.API_KEY }}"
