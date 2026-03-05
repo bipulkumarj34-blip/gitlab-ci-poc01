@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Environment POC</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 400px;
+        }
+        .env-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        /* Dynamic colors based on environment */
+        .production { background-color: #d93025; }
+        .development { background-color: #1a73e8; }
+        .local { background-color: #5f6368; }
+
+        .secret-box {
+            background: #e8f0fe;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div id="env-tag" class="env-badge">Loading...</div>
+        <h1>Deployment Success!</h1>
+        <p>This application was deployed via <strong>GitHub Actions</strong>.</p>
+        
+        <div class="secret-box">
+            <strong>Secret API Key:</strong><br>
+            <span id="secret-val">{{SECRET_KEY}}</span>
+        </div>
+    </div>
+
+    <script>
+        // We will pass the environment name from the server
+        const currentEnv = "{{ENV_NAME}}";
+        const tag = document.getElementById('env-tag');
+        
+        tag.innerText = currentEnv;
+        tag.classList.add(currentEnv.toLowerCase());
+    </script>
+</body>
+</html>
